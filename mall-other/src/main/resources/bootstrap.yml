@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        name: mall-other
+        server-addr: 124.222.77.187:8848
+        file-extension: yml
+        namespace: other
+        group: dev
+        extension-configs:
+          - data-id: oss.yml
+            group: dev

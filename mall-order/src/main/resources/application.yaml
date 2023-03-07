@@ -2,13 +2,21 @@ server:
   port: 9000
 
 spring:
+  application:
+    name: mall-order
   #\u6570\u636E\u5E93\u914D\u7F6E
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://124.222.77.187:3306/mall_oms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://47.113.148.39:3306/mall_oms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&useSSL=false
     username: root
     password: wgx
+  #nacos配置
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 124.222.77.187:8848
+
 
 #mybatis-plus\u914D\u7F6E
 mybatis-plus:

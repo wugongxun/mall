@@ -1,7 +1,11 @@
 package com.wgx.mall.product.service.impl;
 
 import org.springframework.stereotype.Service;
-import java.util.Map;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,10 +24,34 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<CategoryEntity> page = this.page(
                 new Query<CategoryEntity>().getPage(params),
-                new QueryWrapper<CategoryEntity>()
+                new QueryWrapper()
         );
 
         return new PageUtils(page);
     }
 
+    @Override
+    public List<CategoryEntity> tree() {
+        //查出所有分类
+        List<CategoryEntity> entities = this.baseMapper.selectList(null);
+        return entities.stream().filter(item -> item.getCatLevel() == 1)
+                .map(item -> item.setChildren(getChildren(item, entities)))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public List<CategoryEntity> getChildren(CategoryEntity root, List<CategoryEntity> entities) {
+        return entities.stream().filter(item -> item.getParentCid().equals(root.getCatId()))
+                .map(item -> item.setChildren(getChildren(item, entities)))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    //删除
+    @Override
+    public boolean removeByIds(Collection<? extends Serializable> idList) {
+        //TODO 删除前判断
+        this.baseMapper.deleteBatchIds(idList);
+        return false;
+    }
 }

@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        #product服务
+        - id: product
+          uri: lb://mall-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+        #other服务
+        - id: other
+          uri: lb://mall-other
+          predicates:
+            - Path=/api/other/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+        #admin后台服务
+        - id: admin
+          uri: lb://mall-admin
+          predicates:
+            - Path=/api/**

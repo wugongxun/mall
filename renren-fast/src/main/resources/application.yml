@@ -8,7 +8,7 @@ server:
     connection-timeout: 5000ms
   port: 8080
   servlet:
-    context-path: /renren-fast
+    context-path: /api
 
 spring:
   # 环境 dev|test|prod

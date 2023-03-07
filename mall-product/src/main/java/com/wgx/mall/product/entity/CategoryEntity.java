@@ -1,11 +1,16 @@
 package com.wgx.mall.product.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 商品三级分类
@@ -16,7 +21,8 @@ import lombok.Data;
  */
 @Data
 @TableName("pms_category")
-public class CategoryEntity implements Serializable {
+@Accessors(chain = true)
+public class CategoryEntity implements Serializable, Comparable<CategoryEntity> {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -39,6 +45,7 @@ public class CategoryEntity implements Serializable {
 	/**
 	 * 是否显示[0-不显示，1显示]
 	 */
+	@TableLogic
 	private Integer showStatus;
 	/**
 	 * 排序
@@ -56,5 +63,15 @@ public class CategoryEntity implements Serializable {
 	 * 商品数量
 	 */
 	private Integer productCount;
+	/**
+	 * 子分类集合
+	 */
+	@TableField(exist = false)
+	private List<CategoryEntity> children;
 
+	@Override
+	public int compareTo(CategoryEntity o) {
+		return Optional.ofNullable(this.sort).orElse(Integer.MAX_VALUE) -
+				Optional.ofNullable(o.sort).orElse(Integer.MAX_VALUE);
+	}
 }

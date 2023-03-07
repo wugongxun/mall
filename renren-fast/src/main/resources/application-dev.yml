@@ -1,9 +1,11 @@
 spring:
+    application:
+        name: mall-admin
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
             driver-class-name: com.mysql.cj.jdbc.Driver
-            url: jdbc:mysql://124.222.77.187:3306/mall_admin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+            url: jdbc:mysql://47.113.148.39/mall_admin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
             username: root
             password: wgx
             initial-size: 10
@@ -32,6 +34,10 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+    cloud:
+        nacos:
+            discovery:
+                server-addr: 124.222.77.187:8848
 
 
 ##多数据源的配置

@@ -1,20 +1,20 @@
 package com.wgx.mall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import com.wgx.mall.product.entity.CategoryEntity;
 import com.wgx.mall.product.service.CategoryService;
 import com.wgx.common.utils.PageUtils;
 import com.wgx.common.utils.R;
 
+import javax.annotation.Resource;
 
 
 /**
@@ -29,6 +29,20 @@ import com.wgx.common.utils.R;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    //返回所有的分类，并以树形结构返回
+    @GetMapping("/list/tree")
+    public R tree() {
+        List<CategoryEntity> entities = categoryService.tree();
+        return R.ok().put("data", entities);
+    }
+
+    //批量更新节点
+    @PostMapping("/updateBatchById")
+    public R updateByIds(@RequestBody List<CategoryEntity> categories) {
+        categoryService.updateBatchById(categories);
+        return R.ok();
+    }
 
     /**
      * 列表

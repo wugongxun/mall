@@ -18,6 +18,8 @@
         <module>renren-fast</module>
         <module>renren-generator</module>
         <module>mall-common</module>
+        <module>mall-gateway</module>
+        <module>mall-other</module>
     </modules>
 
     <properties>
@@ -27,6 +29,7 @@
         <spring-boot.version>2.7.7</spring-boot.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
+        <aliyun-spring-boot.version>1.0.0</aliyun-spring-boot.version>
         <swagger.fox.version>3.0.0</swagger.fox.version>
         <swagger.core.version>1.6.2</swagger.core.version>
         <fastjson.version>2.0.22</fastjson.version>
@@ -64,9 +67,11 @@
             </dependency>
 
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-devtools</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>aliyun-spring-boot-dependencies</artifactId>
+                <version>${aliyun-spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
