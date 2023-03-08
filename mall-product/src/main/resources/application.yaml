@@ -15,17 +15,17 @@
 #    password: wgx
 #  #redis配置
 #  redis:
-#    #上传服务器之前修改为localhost
 #    host: 47.113.148.39
 #    port: 6379
 #    password: wgx
 #    connect-timeout: 15000
 #    timeout: 100s
 #    lettuce:
+#      shutdown-timeout: 100s
 #      pool:
 #        max-active: 8
-#        max-wait: 15000
-#        max-idle: 10
+#        max-wait: -1ms
+#        max-idle: 5
 #        min-idle: 0
 #  #nacos配置
 #  cloud:
@@ -41,3 +41,9 @@
 #      id-type: auto
 #      logic-delete-value: 0
 #      logic-not-delete-value: 1
+
+
+
+logging:
+  level:
+    com.wgx.mall: debug

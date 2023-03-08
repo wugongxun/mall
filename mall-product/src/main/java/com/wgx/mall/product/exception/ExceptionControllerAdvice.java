@@ -21,9 +21,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R handleValidationException(MethodArgumentNotValidException e) {
         Map<String, String> map = new HashMap<>();
-        e.getFieldErrors().forEach(item -> {
-            map.put(item.getField(), item.getDefaultMessage());
-        });
+        e.getFieldErrors().forEach(item -> map.put(item.getField(), item.getDefaultMessage()));
         return R.error(ExceptionCode.VALIDATION_EXCEPTION.code(), ExceptionCode.VALIDATION_EXCEPTION.message()).put("data", map);
     }
 

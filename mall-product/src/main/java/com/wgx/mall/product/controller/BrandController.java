@@ -2,9 +2,14 @@ package com.wgx.mall.product.controller;
 
 import java.util.*;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wgx.common.validator.group.AddGroup;
 import com.wgx.common.validator.group.UpdateGroup;
+import com.wgx.mall.product.entity.CategoryBrandRelationEntity;
+import com.wgx.mall.product.service.CategoryBrandRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +35,9 @@ import com.wgx.common.utils.R;
 public class BrandController {
     @Autowired
     private BrandService brandService;
+
+    @Autowired
+    private CategoryBrandRelationService categoryBrandRelationService;
 
     /**
      * 列表
@@ -66,8 +74,16 @@ public class BrandController {
      * 修改
      */
     @RequestMapping("/update")
+    @Transactional
     public R update(@Validated(UpdateGroup.class) @RequestBody BrandEntity brand){
 		brandService.updateById(brand);
+        if (StringUtils.hasLength(brand.getName())) {
+            categoryBrandRelationService.update(
+                    Wrappers.lambdaUpdate(CategoryBrandRelationEntity.class)
+                            .eq(CategoryBrandRelationEntity::getBrandId, brand.getBrandId())
+                            .set(CategoryBrandRelationEntity::getBrandName, brand.getName())
+            );
+        }
 
         return R.ok();
     }

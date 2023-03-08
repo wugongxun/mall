@@ -9,6 +9,7 @@ import com.wgx.common.validator.ListValue;
 import com.wgx.common.validator.group.AddGroup;
 import com.wgx.common.validator.group.UpdateGroup;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.*;
@@ -22,6 +23,7 @@ import javax.validation.constraints.*;
  */
 @Data
 @TableName("pms_brand")
+@Accessors(chain = true)
 public class BrandEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

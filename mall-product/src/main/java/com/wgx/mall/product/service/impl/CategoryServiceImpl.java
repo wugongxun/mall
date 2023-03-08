@@ -54,4 +54,17 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         this.baseMapper.deleteBatchIds(idList);
         return false;
     }
+
+    //根据catelogId查找从一级分类开始的路径
+    @Override
+    public Long[] findCategoryPath(Long catelogId) {
+        Deque<Long> catelogPath = new LinkedList();
+        catelogPath.addFirst(catelogId);
+        CategoryEntity category = this.getById(catelogId);
+        while (category.getParentCid() != 0) {
+            category = this.getById(category.getParentCid());
+            catelogPath.addFirst(category.getCatId());
+        }
+        return catelogPath.stream().toArray(Long[]::new);
+    }
 }

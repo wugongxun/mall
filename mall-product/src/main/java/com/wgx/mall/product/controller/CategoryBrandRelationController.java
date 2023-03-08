@@ -1,18 +1,20 @@
 package com.wgx.mall.product.controller;
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.wgx.mall.product.entity.BrandEntity;
+import com.wgx.mall.product.entity.CategoryEntity;
+import com.wgx.mall.product.service.BrandService;
+import com.wgx.mall.product.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import com.wgx.mall.product.entity.CategoryBrandRelationEntity;
 import com.wgx.mall.product.service.CategoryBrandRelationService;
-import com.wgx.common.utils.PageUtils;
 import com.wgx.common.utils.R;
 
 
@@ -30,14 +32,23 @@ public class CategoryBrandRelationController {
     @Autowired
     private CategoryBrandRelationService categoryBrandRelationService;
 
-    /**
-     * 列表
-     */
-    @RequestMapping("/list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = categoryBrandRelationService.queryPage(params);
+    @Autowired
+    private BrandService brandService;
 
-        return R.ok().put("page", page);
+    @Autowired
+    private CategoryService categoryService;
+
+    /**
+     * 获取当前品牌关联的所有分类列表
+     */
+    @GetMapping("/catelog/list")
+    public R list(@RequestParam Long brandId){
+        List<CategoryBrandRelationEntity> data = categoryBrandRelationService.list(
+                Wrappers.lambdaQuery(CategoryBrandRelationEntity.class)
+                        .eq(CategoryBrandRelationEntity::getBrandId, brandId)
+        );
+
+        return R.ok().put("data", data);
     }
 
 
@@ -56,7 +67,24 @@ public class CategoryBrandRelationController {
      */
     @RequestMapping("/save")
     public R save(@RequestBody CategoryBrandRelationEntity categoryBrandRelation){
-		categoryBrandRelationService.save(categoryBrandRelation);
+        String brandName = brandService.getObj(
+                Wrappers.lambdaQuery(BrandEntity.class)
+                        .select(BrandEntity::getName)
+                        .eq(BrandEntity::getBrandId, categoryBrandRelation.getBrandId()),
+                String::valueOf
+        );
+        String categoryName = categoryService.getObj(
+                Wrappers.lambdaQuery(CategoryEntity.class)
+                        .select(CategoryEntity::getName)
+                        .eq(CategoryEntity::getCatId, categoryBrandRelation.getCatelogId()),
+                String::valueOf
+        );
+		categoryBrandRelationService.save(
+                categoryBrandRelation.setBrandName(brandName)
+                        .setCatelogName(categoryName)
+        );
+
+        System.out.println(categoryBrandRelation);
 
         return R.ok();
     }
@@ -65,6 +93,7 @@ public class CategoryBrandRelationController {
      * 修改
      */
     @RequestMapping("/update")
+    @Transactional
     public R update(@RequestBody CategoryBrandRelationEntity categoryBrandRelation){
 		categoryBrandRelationService.updateById(categoryBrandRelation);
 
