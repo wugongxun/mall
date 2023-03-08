@@ -5,8 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.wgx.mall.product.entity.CategoryBrandRelationEntity;
+import com.wgx.mall.product.service.CategoryBrandRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import com.wgx.mall.product.entity.CategoryEntity;
@@ -29,6 +34,9 @@ import javax.annotation.Resource;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CategoryBrandRelationService categoryBrandRelationService;
 
     //返回所有的分类，并以树形结构返回
     @GetMapping("/list/tree")
@@ -79,8 +87,18 @@ public class CategoryController {
      * 修改
      */
     @RequestMapping("/update")
+    @Transactional
     public R update(@RequestBody CategoryEntity category){
 		categoryService.updateById(category);
+
+        //修改联级表
+        if (StringUtils.hasLength(category.getName())) {
+            categoryBrandRelationService.update(
+                    Wrappers.lambdaUpdate(CategoryBrandRelationEntity.class)
+                            .eq(CategoryBrandRelationEntity::getCatelogId, category.getCatId())
+                            .set(CategoryBrandRelationEntity::getCatelogName, category.getName())
+            );
+        }
 
         return R.ok();
     }

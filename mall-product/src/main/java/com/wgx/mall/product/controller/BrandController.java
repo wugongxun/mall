@@ -77,6 +77,8 @@ public class BrandController {
     @Transactional
     public R update(@Validated(UpdateGroup.class) @RequestBody BrandEntity brand){
 		brandService.updateById(brand);
+
+        //修改联级表
         if (StringUtils.hasLength(brand.getName())) {
             categoryBrandRelationService.update(
                     Wrappers.lambdaUpdate(CategoryBrandRelationEntity.class)
