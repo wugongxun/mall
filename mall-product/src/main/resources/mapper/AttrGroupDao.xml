@@ -13,5 +13,16 @@
         <result property="catelogId" column="catelog_id"/>
     </resultMap>
 
+    <delete id="deleteRelation">
+
+            DELETE
+            FROM
+                pms_attr_attrgroup_relation
+            WHERE
+        <foreach collection="vos" item="vo" separator=" OR ">
+                (attr_id = #{vo.attrId} AND attr_group_id = #{vo.attrGroupId})
+        </foreach>
+    </delete>
+
 
 </mapper>

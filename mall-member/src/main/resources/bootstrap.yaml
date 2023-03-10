@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        name: mall-member
+        server-addr: 124.222.77.187:8848
+        namespace: member
+        group: dev
+        file-extension: yml
+        extension-configs:
+          - data-id: database.yml
+            group: dev
+          - data-id: mybatisplus.yml
+            group: dev

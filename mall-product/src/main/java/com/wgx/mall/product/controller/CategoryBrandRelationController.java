@@ -2,12 +2,14 @@ package com.wgx.mall.product.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wgx.mall.product.entity.BrandEntity;
 import com.wgx.mall.product.entity.CategoryEntity;
 import com.wgx.mall.product.service.BrandService;
 import com.wgx.mall.product.service.CategoryService;
+import com.wgx.mall.product.vo.BrandVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -37,6 +39,21 @@ public class CategoryBrandRelationController {
 
     @Autowired
     private CategoryService categoryService;
+
+    /**
+     * 获取当前分类下的所有品牌
+     */
+    @GetMapping("/brands/list")
+    public R relationBrandsList(@RequestParam("catId") Long catId) {
+        List<BrandEntity> entities = categoryBrandRelationService.relationBrandsList(catId);
+        List<BrandVo> vos = entities.stream().map(entity -> {
+            BrandVo vo = new BrandVo();
+            vo.setBrandId(entity.getBrandId());
+            vo.setBrandName(entity.getName());
+            return vo;
+        }).collect(Collectors.toList());
+        return R.ok().put("data", vos);
+    }
 
     /**
      * 获取当前品牌关联的所有分类列表

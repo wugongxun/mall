@@ -2,7 +2,9 @@ package com.wgx.mall.product.dao;
 
 import com.wgx.mall.product.entity.AttrGroupEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wgx.mall.product.vo.AttrGroupRelationVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 属性分组
@@ -13,5 +15,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AttrGroupDao extends BaseMapper<AttrGroupEntity> {
-	
+
+    void deleteRelation(@Param("vos") AttrGroupRelationVo[] vos);
 }
