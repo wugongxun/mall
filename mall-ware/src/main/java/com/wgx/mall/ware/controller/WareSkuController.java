@@ -1,6 +1,7 @@
 package com.wgx.mall.ware.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,15 @@ import com.wgx.common.utils.R;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+    /**
+     * 查询是否有库存
+     */
+    @PostMapping("/hasStock")
+    public R<Map<Long, Boolean>> hasStock(@RequestBody List<Long> skuIds) {
+        Map<Long, Boolean> data = wareSkuService.hasStock(skuIds);
+        return R.ok().setData(data);
+    }
 
     /**
      * 列表

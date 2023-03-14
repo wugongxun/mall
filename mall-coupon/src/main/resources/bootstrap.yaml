@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 124.222.77.187:8848
+        namespace: coupon
+        name: mall-coupon
+        file-extension: yml
+        group: dev
+        extension-configs:
+          - data-id: database.yml
+            group: dev
+          - data-id: mybatisplus.yml
+            group: dev

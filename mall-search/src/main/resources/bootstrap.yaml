@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        name: mall-search
+        server-addr: 124.222.77.187:8848
+        file-extension: yaml
+        namespace: search
+        group: dev
+#        extension-configs:
+#          - data-id: datasource.yaml
+#            group: dev
+#          - data-id: mybatis-plus.yaml
+#            group: dev

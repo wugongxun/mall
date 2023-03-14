@@ -16,6 +16,13 @@ spring:
             - Path=/api/member/**
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
+        #ware服务
+        - id: ware
+          uri: lb://mall-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
         #other服务
         - id: other
           uri: lb://mall-other

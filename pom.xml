@@ -20,6 +20,7 @@
         <module>mall-common</module>
         <module>mall-gateway</module>
         <module>mall-other</module>
+        <module>mall-search</module>
     </modules>
 
     <properties>
@@ -38,6 +39,7 @@
         <mybatisplus.version>3.3.1</mybatisplus.version>
         <commons.lang.version>2.6</commons.lang.version>
         <commons.io.version>2.5</commons.io.version>
+        <elasticsearch.version>7.4.2</elasticsearch.version>
     </properties>
 
     <dependencyManagement>

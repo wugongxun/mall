@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 124.222.77.187:8848
+        name: mall-ware
+        namespace: ware
+        file-extension: yaml
+        group: dev
+        extension-configs:
+          - data-id: datasource.yaml
+            group: dev
+          - data-id: mybatis-plus.yaml
+            group: dev

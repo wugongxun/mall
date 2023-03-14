@@ -191,4 +191,9 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         return attrIds.isEmpty() ? null : this.baseMapper.selectBatchIds(attrIds);
     }
 
+    @Override
+    public List<Long> getSearchAttrIds(List<Long> attrIds) {
+        return this.baseMapper.getSearchAttrIds(attrIds);
+    }
+
 }

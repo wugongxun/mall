@@ -8,6 +8,7 @@
 
 package com.wgx.common.utils;
 
+import com.wgx.common.exception.ExceptionCode;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
@@ -18,9 +19,9 @@ import java.util.Map;
  *
  * @author Mark sunlightcs@gmail.com
  */
-public class R extends HashMap<String, Object> {
+public class R<T> extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
-	
+
 	public R() {
 		put("code", 0);
 		put("msg", "success");
@@ -39,6 +40,10 @@ public class R extends HashMap<String, Object> {
 		r.put("code", code);
 		r.put("msg", msg);
 		return r;
+	}
+
+	public static R error(ExceptionCode e) {
+		return R.error(e.code(), e.message());
 	}
 
 	public static R ok(String msg) {
@@ -60,5 +65,17 @@ public class R extends HashMap<String, Object> {
 	public R put(String key, Object value) {
 		super.put(key, value);
 		return this;
+	}
+
+	public Integer getCode() {
+		return (Integer) this.get("code");
+	}
+
+	public R setData(T data) {
+		return this.put("data", data);
+	}
+
+	public T getData() {
+		return (T) this.get("data");
 	}
 }

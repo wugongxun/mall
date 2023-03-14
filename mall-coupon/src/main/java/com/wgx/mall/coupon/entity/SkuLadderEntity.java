@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 商品阶梯价格
@@ -17,6 +18,7 @@ import lombok.Data;
  */
 @Data
 @TableName("sms_sku_ladder")
+@Accessors(chain = true)
 public class SkuLadderEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -1,11 +1,13 @@
 package com.wgx.mall.product.entity;
 
+import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * spu属性值
@@ -16,6 +18,7 @@ import lombok.Data;
  */
 @Data
 @TableName("pms_product_attr_value")
+@Accessors(chain = true)
 public class ProductAttrValueEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

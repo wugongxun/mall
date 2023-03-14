@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * sku信息
@@ -17,6 +18,7 @@ import lombok.Data;
  */
 @Data
 @TableName("pms_sku_info")
+@Accessors(chain = true)
 public class SkuInfoEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
