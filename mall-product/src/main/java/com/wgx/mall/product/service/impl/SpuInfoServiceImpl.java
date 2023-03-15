@@ -1,5 +1,6 @@
 package com.wgx.mall.product.service.impl;
 
+import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wgx.common.constants.ProductConstant;
 import com.wgx.common.to.SkuEsTo;
@@ -265,7 +266,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
         Map<Long, Boolean> hasStockRsp = null;
         try {
-            hasStockRsp = wareFeignService.hasStock(skuInfoEntities.stream().map(SkuInfoEntity::getSkuId).collect(Collectors.toList())).getData();
+            R<Map<Long, Boolean>> r = wareFeignService.hasStock(skuInfoEntities.stream().map(SkuInfoEntity::getSkuId).collect(Collectors.toList()));
+            hasStockRsp = r.getData(new TypeReference<Map<Long, Boolean>>(){});
         } catch (Exception e) {
             log.error("远程调用库存服务出现异常\n{}", e);
         }
@@ -280,7 +282,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             skuEsTo.setHotScore(0l);
 
 
-            skuEsTo.setHasStock(finalHasStockRsp == null ? true : finalHasStockRsp.get(skuInfoEntity.getSkuId()));
+            skuEsTo.setHasStock(finalHasStockRsp == null ? true :
+                    finalHasStockRsp.get(skuInfoEntity.getSkuId()) == null ? true : finalHasStockRsp.get(skuInfoEntity.getSkuId()));
 
 
             skuEsTo.setBrandName(brandEntity.getName());

@@ -31,7 +31,7 @@ public class SpuInfoController {
     /**
      * 商品上架
      */
-    @GetMapping("/{spuId}/up")
+    @PostMapping("/{spuId}/up")
     public R up(@PathVariable("spuId") Long spuId) {
         this.spuInfoService.up(spuId);
         return R.ok();

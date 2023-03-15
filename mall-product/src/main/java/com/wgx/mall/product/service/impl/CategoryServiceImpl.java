@@ -1,5 +1,6 @@
 package com.wgx.mall.product.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -66,5 +67,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
             catelogPath.addFirst(category.getCatId());
         }
         return catelogPath.stream().toArray(Long[]::new);
+    }
+
+    @Override
+    public List<CategoryEntity> getLevel1Categroies() {
+        return this.baseMapper.selectList(
+                Wrappers.lambdaQuery(CategoryEntity.class)
+                        .eq(CategoryEntity::getParentCid, 0)
+        );
     }
 }

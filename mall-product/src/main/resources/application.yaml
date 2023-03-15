@@ -47,3 +47,6 @@
 logging:
   level:
     com.wgx.mall: debug
+spring:
+  thymeleaf:
+    cache: false

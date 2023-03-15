@@ -21,5 +21,7 @@ public interface CategoryService extends IService<CategoryEntity> {
     List<CategoryEntity> tree();
 
     Long[] findCategoryPath(Long catelogId);
+
+    List<CategoryEntity> getLevel1Categroies();
 }
 

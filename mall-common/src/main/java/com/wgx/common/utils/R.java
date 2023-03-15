@@ -8,6 +8,8 @@
 
 package com.wgx.common.utils;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import com.wgx.common.exception.ExceptionCode;
 import org.apache.http.HttpStatus;
 
@@ -75,7 +77,8 @@ public class R<T> extends HashMap<String, Object> {
 		return this.put("data", data);
 	}
 
-	public T getData() {
-		return (T) this.get("data");
+	public T getData(TypeReference<T> typeReference) {
+		String data = JSON.toJSONString(this.get("data"));
+		return JSON.parseObject(data, typeReference);
 	}
 }
