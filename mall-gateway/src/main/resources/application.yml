@@ -35,3 +35,9 @@ spring:
           uri: lb://mall-admin
           predicates:
             - Path=/api/**
+
+        #host转发
+        - id: host
+          uri: lb://mall-product
+          predicates:
+            - Host=**.wgx.com

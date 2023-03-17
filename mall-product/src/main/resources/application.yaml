@@ -44,9 +44,9 @@
 
 
 
-logging:
-  level:
-    com.wgx.mall: debug
+#logging:
+#  level:
+#    com.wgx.mall: debug
 spring:
   thymeleaf:
-    cache: false
+    cache: true

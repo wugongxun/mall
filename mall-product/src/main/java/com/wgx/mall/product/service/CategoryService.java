@@ -3,6 +3,7 @@ package com.wgx.mall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wgx.common.utils.PageUtils;
 import com.wgx.mall.product.entity.CategoryEntity;
+import com.wgx.mall.product.vo.Catalog2Vo;
 
 import java.util.List;
 import java.util.Map;
@@ -23,5 +24,7 @@ public interface CategoryService extends IService<CategoryEntity> {
     Long[] findCategoryPath(Long catelogId);
 
     List<CategoryEntity> getLevel1Categroies();
+
+    Map<String, List<Catalog2Vo>> getCatalogJson();
 }
 

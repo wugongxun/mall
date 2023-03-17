@@ -1,10 +1,16 @@
 package com.wgx.mall.product.service.impl;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.wgx.mall.product.vo.Catalog2Vo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -16,10 +22,14 @@ import com.wgx.common.utils.Query;
 import com.wgx.mall.product.dao.CategoryDao;
 import com.wgx.mall.product.entity.CategoryEntity;
 import com.wgx.mall.product.service.CategoryService;
+import org.springframework.util.StringUtils;
 
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -75,5 +85,83 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                 Wrappers.lambdaQuery(CategoryEntity.class)
                         .eq(CategoryEntity::getParentCid, 0)
         );
+    }
+
+    @Override
+    public Map<String, List<Catalog2Vo>> getCatalogJson() {
+
+        String catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
+        if (StringUtils.hasLength(catalogJson)) {
+            //缓存命中
+            return JSON.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2Vo>>>(){});
+        }
+
+        synchronized (this) {
+
+            //再次检查缓存
+            catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
+            if (StringUtils.hasLength(catalogJson)) {
+                //缓存命中
+                return JSON.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2Vo>>>(){});
+            }
+
+            List<CategoryEntity> categoryEntities = this.list();
+            Map<String, List<Catalog2Vo>> res = categoryEntities.stream()
+                    .filter(categoryEntity1 -> categoryEntity1.getParentCid() == 0)
+                    .collect(Collectors.toMap(k -> k.getCatId().toString(), v ->
+                            categoryEntities.stream()
+                                    .filter(categoryEntity2 -> categoryEntity2.getParentCid() == v.getCatId())
+                                    .map(categoryEntity2 -> {
+                                        Catalog2Vo catalog2Vo = new Catalog2Vo();
+                                        catalog2Vo.setCatalog1Id(v.getCatId().toString())
+                                                .setId(categoryEntity2.getCatId().toString())
+                                                .setName(categoryEntity2.getName())
+                                                .setCatalog3List(
+                                                        categoryEntities.stream()
+                                                                .filter(categoryEntity3 -> categoryEntity3.getParentCid() == categoryEntity2.getCatId())
+                                                                .map(categoryEntity3 -> {
+                                                                    Catalog2Vo.Catalog3Vo catalog3Vo = new Catalog2Vo.Catalog3Vo();
+                                                                    catalog3Vo.setCatalog2Id(categoryEntity2.getCatId().toString())
+                                                                            .setName(categoryEntity3.getName())
+                                                                            .setId(categoryEntity3.getCatId().toString());
+                                                                    return catalog3Vo;
+                                                                })
+                                                                .collect(Collectors.toList())
+                                                );
+                                        return catalog2Vo;
+                                    }).collect(Collectors.toList())
+                    ));
+            //存入redis
+            stringRedisTemplate.opsForValue().set("catalogJson", JSON.toJSONString(res), 1, TimeUnit.DAYS);
+            return res;
+        }
+
+
+//        List<CategoryEntity> level1Categroies = this.getLevel1Categroies();
+//        return level1Categroies.stream().collect(Collectors.toMap(k -> k.getCatId().toString(), v -> {
+//            List<CategoryEntity> categoryEntities = this.baseMapper.selectList(
+//                    Wrappers.lambdaQuery(CategoryEntity.class)
+//                            .eq(CategoryEntity::getParentCid, v.getCatId())
+//            );
+//            return categoryEntities.stream().map(category2Entity -> {
+//                Catalog2Vo catalog2Vo = new Catalog2Vo();
+//                catalog2Vo.setCatalog1Id(v.getCatId().toString())
+//                        .setId(category2Entity.getCatId().toString())
+//                        .setName(category2Entity.getName())
+//                        .setCatalog3List(
+//                                this.baseMapper.selectList(
+//                                        Wrappers.lambdaQuery(CategoryEntity.class)
+//                                                .eq(CategoryEntity::getParentCid, category2Entity.getCatId())
+//                                ).stream().map(category3Entity -> {
+//                                    Catalog2Vo.Catalog3Vo catalog3Vo = new Catalog2Vo.Catalog3Vo();
+//                                    catalog3Vo.setCatalog2Id(category2Entity.getCatId().toString())
+//                                            .setName(category3Entity.getName())
+//                                            .setId(category3Entity.getCatId().toString());
+//                                    return catalog3Vo;
+//                                }).collect(Collectors.toList())
+//                        );
+//                return catalog2Vo;
+//            }).collect(Collectors.toList());
+//        }));
     }
 }
