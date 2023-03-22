@@ -33,7 +33,7 @@
         <aliyun-spring-boot.version>1.0.0</aliyun-spring-boot.version>
         <swagger.fox.version>3.0.0</swagger.fox.version>
         <swagger.core.version>1.6.2</swagger.core.version>
-        <fastjson.version>2.0.22</fastjson.version>
+        <fastjson.version>2.0.25</fastjson.version>
         <druid.version>1.2.15</druid.version>
         <lombok.version>1.18.26</lombok.version>
         <mybatisplus.version>3.3.1</mybatisplus.version>

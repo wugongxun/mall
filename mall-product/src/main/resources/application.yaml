@@ -15,6 +15,7 @@
 #    password: wgx
 #  #redis配置
 #  redis:
+#    #host: 192.168.154.128
 #    host: 47.113.148.39
 #    port: 6379
 #    password: wgx
@@ -50,3 +51,12 @@
 spring:
   thymeleaf:
     cache: true
+  redis:
+    host: 192.168.154.128
+#    host: 47.113.148.39
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+#      use-key-prefix: false
+      cache-null-values: true

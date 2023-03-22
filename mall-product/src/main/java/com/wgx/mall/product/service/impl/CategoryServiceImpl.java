@@ -4,7 +4,10 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.TypeReference;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wgx.mall.product.vo.Catalog2Vo;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -80,6 +86,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
     @Override
+    @Cacheable(cacheNames = "category", key = "'level1Categroies'")
     public List<CategoryEntity> getLevel1Categroies() {
         return this.baseMapper.selectList(
                 Wrappers.lambdaQuery(CategoryEntity.class)
@@ -88,18 +95,24 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
     @Override
+    @Cacheable(cacheNames = "category", key = "'catalogJson'", sync = true)
     public Map<String, List<Catalog2Vo>> getCatalogJson() {
 
-        String catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
-        if (StringUtils.hasLength(catalogJson)) {
-            //缓存命中
-            return JSON.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2Vo>>>(){});
-        }
+//        String catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
+//        if (StringUtils.hasLength(catalogJson)) {
+//            //缓存命中
+//            return JSON.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2Vo>>>(){});
+//        }
 
-        synchronized (this) {
+        //加锁
+        RLock lock = redissonClient.getLock("getCatalogJsonLock");
+        lock.lock(10, TimeUnit.SECONDS);
+
+
+        try {
 
             //再次检查缓存
-            catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
+            String catalogJson = stringRedisTemplate.opsForValue().get("catalogJson");
             if (StringUtils.hasLength(catalogJson)) {
                 //缓存命中
                 return JSON.parseObject(catalogJson, new TypeReference<Map<String, List<Catalog2Vo>>>(){});
@@ -131,9 +144,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                                         return catalog2Vo;
                                     }).collect(Collectors.toList())
                     ));
-            //存入redis
-            stringRedisTemplate.opsForValue().set("catalogJson", JSON.toJSONString(res), 1, TimeUnit.DAYS);
+//            //存入redis
+//            stringRedisTemplate.opsForValue().set("catalogJson", JSON.toJSONString(res), 1, TimeUnit.DAYS);
             return res;
+        } finally {
+            lock.unlock();
         }
 
 
