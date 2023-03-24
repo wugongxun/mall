@@ -13,5 +13,31 @@
         <result property="attrSort" column="attr_sort"/>
     </resultMap>
 
+    <resultMap id="skuItemSaleAttrsMap" type="com.wgx.mall.product.vo.SkuItemVo$SkuItemSaleAttrsVo">
+        <result property="attrId" column="attrId"></result>
+        <result property="attrName" column="attrName"></result>
+        <collection property="attrValues" ofType="com.wgx.mall.product.vo.SkuItemVo$AttrValueWithSkuIdsVo">
+            <result property="attrValue" column="attrValue"></result>
+            <result property="skuIds" column="skuIds"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getSaleAttrsBySpuId" resultMap="skuItemSaleAttrsMap">
+        SELECT
+            ssav.attr_id attrId,
+            ssav.attr_name attrName,
+            ssav.attr_value attrValue,
+            GROUP_CONCAT(info.sku_id) skuIds
+        FROM
+            pms_sku_info info
+                LEFT JOIN pms_sku_sale_attr_value ssav ON ssav.sku_id = info.sku_id
+        WHERE
+            spu_id = 10
+        GROUP BY
+            ssav.attr_id,
+            ssav.attr_name,
+            ssav.attr_value
+    </select>
+
 
 </mapper>

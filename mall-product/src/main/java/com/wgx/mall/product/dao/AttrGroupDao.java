@@ -3,8 +3,11 @@ package com.wgx.mall.product.dao;
 import com.wgx.mall.product.entity.AttrGroupEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wgx.mall.product.vo.AttrGroupRelationVo;
+import com.wgx.mall.product.vo.SkuItemVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 属性分组
@@ -17,4 +20,6 @@ import org.apache.ibatis.annotations.Param;
 public interface AttrGroupDao extends BaseMapper<AttrGroupEntity> {
 
     void deleteRelation(@Param("vos") AttrGroupRelationVo[] vos);
+
+    List<SkuItemVo.SpuItemAttrGroupVo> getAttrGroupWithSpuId(@Param("spuId") Long spuId, @Param("catalogId") Long catalogId);
 }

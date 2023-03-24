@@ -5,6 +5,7 @@ import com.wgx.common.utils.PageUtils;
 import com.wgx.mall.product.entity.AttrGroupEntity;
 import com.wgx.mall.product.vo.AttrGroupRelationVo;
 import com.wgx.mall.product.vo.AttrGroupWithAttrsVo;
+import com.wgx.mall.product.vo.SkuItemVo;
 
 import java.util.List;
 import java.util.Map;
@@ -27,5 +28,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     PageUtils noRelation(Map<String, Object> params, Long attrgroupId);
 
     List<AttrGroupWithAttrsVo> getAttrGroupWithAttrs(Long catelogId);
+
+    List<SkuItemVo.SpuItemAttrGroupVo> getAttrGroupWithSpuId(Long spuId, Long catalogId);
 }
 

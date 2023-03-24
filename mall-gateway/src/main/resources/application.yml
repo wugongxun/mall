@@ -39,7 +39,7 @@ spring:
         - id: host
           uri: lb://mall-product
           predicates:
-            - Host=www.mall.com,mall.com
+            - Host=www.mall.com,mall.com,www.item.mall.com,item.mall.com
         - id: search_host
           uri: lb://mall-search
           predicates:

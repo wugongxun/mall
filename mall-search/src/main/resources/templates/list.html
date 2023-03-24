@@ -1016,12 +1016,25 @@
                 <div class="filter">
                     <!--综合排序-->
                     <div class="filter_top">
-                        <div class="filter_top_left">
-                            <a href="/static/search/#">综合排序</a>
-                            <a href="/static/search/#">销量</a>
-                            <a href="/static/search/#">价格</a>
-                            <a href="/static/search/#">评论分</a>
-                            <a href="/static/search/#">上架时间</a>
+                        <div class="filter_top_left" th:with="sort = ${param.sort},price = ${param.skuPrice}">
+                            <a th:class="${(!#strings.isEmpty(sort) && #strings.startsWith(sort, 'hotScore') && #strings.endsWith(sort, 'desc')) ? 'sort-active desc' : 'sort-active'}"
+                               sort="hotScore"
+                               th:attr="style=${(#strings.isEmpty(sort) || #strings.startsWith(sort, 'hotScore')) ? 'color: #FFF; border-color: #e4393c; background: #e4393c' : 'color: #333; border-color: #CCC; background: #FFF'}"
+                               href="/static/search/#">综合排序[[${(!#strings.isEmpty(sort) && #strings.startsWith(sort, 'hotScore') && #strings.endsWith(sort, 'desc')) ? '↓' : '↑'}]]</a>
+                            <a th:class="${(!#strings.isEmpty(sort) && #strings.startsWith(sort, 'saleCount') && #strings.endsWith(sort, 'desc')) ? 'sort-active desc' : 'sort-active'}"
+                               sort="saleCount"
+                               th:attr="style=${(!#strings.isEmpty(sort) && #strings.startsWith(sort, 'saleCount')) ? 'color: #FFF; border-color: #e4393c; background: #e4393c' : 'color: #333; border-color: #CCC; background: #FFF'}"
+                               href="/static/search/#">销量[[${(!#strings.isEmpty(sort) && #strings.startsWith(sort, 'saleCount') && #strings.endsWith(sort, 'desc')) ? '↓' : '↑'}]]</a>
+                            <a th:class="${(!#strings.isEmpty(sort) && #strings.startsWith(sort, 'skuPrice') && #strings.endsWith(sort, 'desc')) ? 'sort-active desc' : 'sort-active'}"
+                               sort="skuPrice"
+                               th:attr="style=${(!#strings.isEmpty(sort) && #strings.startsWith(sort, 'skuPrice')) ? 'color: #FFF; border-color: #e4393c; background: #e4393c' : 'color: #333; border-color: #CCC; background: #FFF'}"
+                               href="/static/search/#">价格[[${(!#strings.isEmpty(sort) && #strings.startsWith(sort, 'skuPrice') && #strings.endsWith(sort, 'desc')) ? '↓' : '↑'}]]</a>
+
+                            <input id="skuPriceFrom" type="number" style="width: 100px;margin-left: 20px;outline: none;height: 20px" th:value="${#strings.isEmpty(price) ? '' : #strings.substringBefore(price, '_')}"> -
+                            <input id="skuPriceTo" type="number" style="width: 100px;margin-left: 5px;outline: none;height: 20px" th:value="${#strings.isEmpty(price) ? '' : #strings.substringAfter(price, '_')}">
+                            <button id="skuPriceBtn" style="color: #FFF;background: #e4393c;border: 1px solid #e4393c;font-size: 12px;text-decoration: none;height: 23px;width: 60px;cursor: pointer">
+                                确定
+                            </button>
                         </div>
                         <div class="filter_top_right">
                             <span class="fp-text">
@@ -1129,8 +1142,8 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/static/search/#">
-                                        <i></i>
+                                    <a href="/static/search/#" th:with="checked = ${param.hasStock}">
+                                        <input id="showHasStock" type="checkbox" th:checked="${#strings.equals(checked, '1')}">
                                         仅显示有货
                                     </a>
                                 </li>
@@ -1152,7 +1165,7 @@
                                 <a href="/static/search/#">关注</a>
                             </div>
                             <p class="da">
-                                <a href="/static/search/#">
+                                <a th:href="|http://item.mall.com/${product.skuId}.html|">
                                     <img th:src="${product.skuImg}" class="dim">
                                 </a>
                             </p>
@@ -1966,6 +1979,57 @@
         let keyword = $("#keyword_input").val();
         searchProducts("keyword", keyword);
     }
+
+    $(".sort-active").click(function () {
+        // {"color: #333, border-color: #CCC, background: #FFF"}
+        // {"color: #FFF, border-color: #e4393c, background: #e4393c"}
+
+        // $(".sort-active").css({"color": "#333", "border-color": "#CCC", "background": "#FFF"});
+        // $(".sort-active").each(function () {
+        //     $(this).text($(this).text().replace("↑", "").replace("↓", ""))
+        // });
+        // $(this).css({"color": "#FFF", "border-color": "#e4393c", "background": "#e4393c"});
+        //
+        // if ($(this).hasClass("desc")) {
+        //     $(this).text($(this).text().replace("↑", "") + "↓");
+        // } else {
+        //     $(this).text($(this).text().replace("↓", "") + "↑");
+        // }
+
+        $(this).toggleClass("desc");
+
+        let sort = $(this).attr("sort") + ($(this).hasClass("desc") ? "_desc" : "_acs");
+        window.location.href = replaceAndAddParam(window.location.href, "sort", sort);
+
+        return false;
+    });
+    
+    
+    function replaceAndAddParam(url, paramName, val) {
+        let oUrl = url.toString();
+        if (oUrl.indexOf(paramName) != -1) {
+            let re = eval('/(' + paramName + '=)([^&]*)/gi');
+            let nUrl = oUrl.replace(re, paramName + "=" + val);
+            return nUrl;
+        } else {
+            if (oUrl.indexOf("?") == -1) {
+                return oUrl + `?${paramName}=${val}`;
+            } else {
+                return oUrl + `&${paramName}=${val}`;
+            }
+        }
+    }
+
+    $("#skuPriceBtn").click(function () {
+        let from = $("#skuPriceFrom").val();
+        let to = $("#skuPriceTo").val();
+        window.location.href = replaceAndAddParam(window.location.href, "skuPrice", `${from}_${to}`);
+    });
+
+    $("#showHasStock").change(function () {
+
+        window.location.href = replaceAndAddParam(window.location.href, "hasStock", $(this).prop("checked") ? 1 : 0);
+    });
 </script>
 </body>
 </html>

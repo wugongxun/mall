@@ -3,12 +3,12 @@ package com.wgx.mall.product.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.wgx.common.constants.ProductConstant;
 import com.wgx.mall.product.dao.AttrAttrgroupRelationDao;
-import com.wgx.mall.product.dao.AttrDao;
 import com.wgx.mall.product.entity.AttrAttrgroupRelationEntity;
 import com.wgx.mall.product.entity.AttrEntity;
 import com.wgx.mall.product.service.AttrService;
 import com.wgx.mall.product.vo.AttrGroupRelationVo;
 import com.wgx.mall.product.vo.AttrGroupWithAttrsVo;
+import com.wgx.mall.product.vo.SkuItemVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -120,6 +120,11 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             }).collect(Collectors.toList());
         }
         return res;
+    }
+
+    @Override
+    public List<SkuItemVo.SpuItemAttrGroupVo> getAttrGroupWithSpuId(Long spuId, Long catalogId) {
+        return this.baseMapper.getAttrGroupWithSpuId(spuId, catalogId);
     }
 
 }

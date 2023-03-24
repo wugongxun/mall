@@ -3,6 +3,7 @@ package com.wgx.mall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wgx.common.utils.PageUtils;
 import com.wgx.mall.product.entity.SkuInfoEntity;
+import com.wgx.mall.product.vo.SkuItemVo;
 
 import java.util.Map;
 
@@ -18,5 +19,7 @@ public interface SkuInfoService extends IService<SkuInfoEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     PageUtils queryPageByCondition(Map<String, Object> params);
+
+    SkuItemVo item(Long skuId);
 }
 
