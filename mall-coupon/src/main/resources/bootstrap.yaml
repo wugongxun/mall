@@ -2,7 +2,7 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 124.222.77.187:8848
+        server-addr: 192.168.154.128:8848
         namespace: coupon
         name: mall-coupon
         file-extension: yml

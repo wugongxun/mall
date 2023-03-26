@@ -1,0 +1,25 @@
+server:
+  port: 14000
+
+spring:
+  application:
+    name: mall-auth
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.154.128:8848
+  thymeleaf:
+    cache: false
+  redis:
+    host: 192.168.154.128
+    port: 6379
+    password: wgx
+    connect-timeout: 15000
+    timeout: 100s
+    lettuce:
+      shutdown-timeout: 100s
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 5
+        min-idle: 0

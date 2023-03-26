@@ -2,8 +2,8 @@ spring:
   cloud:
     nacos:
       config:
-        name: mall-gateway
+        name: mall-auth
         server-addr: 192.168.154.128:8848
-        namespace: gateway
-        group: dev
         file-extension: yml
+        group: dev
+        namespace: auth

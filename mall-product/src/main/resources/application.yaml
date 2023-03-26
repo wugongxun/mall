@@ -60,3 +60,8 @@ spring:
       time-to-live: 3600000
 #      use-key-prefix: false
       cache-null-values: true
+
+thread:
+  core-size: 10
+  max-size: 100
+  keep-alive-time: 100

@@ -1544,7 +1544,21 @@
 <script src="/static/item/js/js.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     $(".sku-attr-value").click(function () {
+        let skuIds = [];
 
+        let cur = $(this).attr("skuIds").split(",");
+        skuIds.push(cur);
+        $(this).parent().parent().find(".sku-attr-value").removeClass("checked");
+
+        $(".sku-attr-value.checked").each(function () {
+            skuIds.push($(this).attr("skuIds").split(","));
+        })
+
+        let filterEl = skuIds[0];
+        for (let i = 1; i < skuIds.length; i++) {
+            filterEl = $(filterEl).filter(skuIds[i]);
+        }
+        window.location.href = "http://item.mall.com/" + filterEl[0] + ".html"
     });
 
     $(function () {

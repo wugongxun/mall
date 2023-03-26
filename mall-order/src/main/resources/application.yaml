@@ -15,7 +15,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 124.222.77.187:8848
+        server-addr: 192.168.154.128:8848
 
 
 #mybatis-plus\u914D\u7F6E

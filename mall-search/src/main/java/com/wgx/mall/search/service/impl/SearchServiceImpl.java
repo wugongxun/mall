@@ -200,8 +200,6 @@ public class SearchServiceImpl implements SearchService {
                 );
         builder.aggregation(attrAgg);
 
-        System.out.println(builder);
-
 
         return new SearchRequest(new String[]{EsConstant.PRODUCT_INDEX}, builder);
     }
