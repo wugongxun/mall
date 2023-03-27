@@ -73,6 +73,10 @@ public class R<T> extends HashMap<String, Object> {
 		return (Integer) this.get("code");
 	}
 
+	public String getMsg() {
+		return (String) this.get("msg");
+	}
+
 	public R setData(T data) {
 		return this.put("data", data);
 	}

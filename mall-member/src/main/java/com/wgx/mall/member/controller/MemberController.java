@@ -3,12 +3,9 @@ package com.wgx.mall.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.wgx.mall.member.to.RegisterTo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.wgx.mall.member.entity.MemberEntity;
 import com.wgx.mall.member.service.MemberService;
@@ -29,6 +26,16 @@ import com.wgx.common.utils.R;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+
+    /**
+     * 注册
+     */
+    @PostMapping("/register")
+    public R register(@RequestBody RegisterTo registerTo) {
+        return memberService.register(registerTo);
+    }
+
 
     /**
      * 列表

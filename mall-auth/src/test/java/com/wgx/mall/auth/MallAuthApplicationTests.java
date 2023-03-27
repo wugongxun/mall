@@ -2,6 +2,7 @@ package com.wgx.mall.auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * @author wgx
@@ -11,5 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MallAuthApplicationTests {
     @Test
     void contextLoads() {
+        //e10adc3949ba59abbe56e057f20f883e
+
     }
 }
