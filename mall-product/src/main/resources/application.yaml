@@ -50,7 +50,7 @@
 #    com.wgx.mall: debug
 spring:
   thymeleaf:
-    cache: true
+    cache: false
   redis:
     host: 192.168.154.128
 #    host: 47.113.148.39

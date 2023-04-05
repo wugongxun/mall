@@ -23,3 +23,12 @@ spring:
         max-wait: -1ms
         max-idle: 5
         min-idle: 0
+  session:
+    store-type: redis
+    timeout: 1d
+
+gitee:
+  oauth:
+    clientid: c94541ea28217f62d662a009f9b80533a8b99d6d18cbc971a1742a61c04c6abc
+    clientsecret: 5b717f006d9c1eb3ade2ffb59e613a91f339a9085e3a50201f2b6c199ec5f20d
+    callback: http://auth.mall.com/auth/callback

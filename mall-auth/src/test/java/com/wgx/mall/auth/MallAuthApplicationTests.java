@@ -1,8 +1,14 @@
 package com.wgx.mall.auth;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONReader;
+import com.wgx.common.utils.R;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author wgx
@@ -12,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class MallAuthApplicationTests {
     @Test
     void contextLoads() {
-        //e10adc3949ba59abbe56e057f20f883e
+
 
     }
 }

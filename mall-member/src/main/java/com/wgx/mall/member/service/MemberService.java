@@ -1,9 +1,11 @@
 package com.wgx.mall.member.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wgx.common.to.SocialUserTo;
 import com.wgx.common.utils.PageUtils;
 import com.wgx.common.utils.R;
 import com.wgx.mall.member.entity.MemberEntity;
+import com.wgx.mall.member.to.LoginTo;
 import com.wgx.mall.member.to.RegisterTo;
 
 import java.util.Map;
@@ -20,5 +22,9 @@ public interface MemberService extends IService<MemberEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     R register(RegisterTo registerTo);
+
+    R<MemberEntity> login(LoginTo loginTo);
+
+    R<MemberEntity> socialLogin(SocialUserTo socialUserTo);
 }
 

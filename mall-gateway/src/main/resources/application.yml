@@ -48,3 +48,11 @@ spring:
           uri: lb://mall-auth
           predicates:
             - Host=www.auth.mall.com,auth.mall.com
+        - id: cart_host
+          uri: lb://mall-cart
+          predicates:
+            - Host=www.cart.mall.com,cart.mall.com
+        - id: order_host
+          uri: lb://mall-order
+          predicates:
+            - Host=www.order.mall.com,order.mall.com

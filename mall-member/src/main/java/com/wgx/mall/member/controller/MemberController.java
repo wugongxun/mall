@@ -3,6 +3,8 @@ package com.wgx.mall.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.wgx.common.to.SocialUserTo;
+import com.wgx.mall.member.to.LoginTo;
 import com.wgx.mall.member.to.RegisterTo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,27 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+
+    /**
+     * 社交登录
+     */
+    @PostMapping("/socialLogin")
+    public R<MemberEntity> socialLogin(@RequestBody SocialUserTo socialUserTo) {
+        try {
+            return memberService.socialLogin(socialUserTo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("登录失败");
+        }
+    }
+
+    /**
+     * 登录
+     */
+    @PostMapping("/login")
+    public R<MemberEntity> login(@RequestBody LoginTo loginTo) {
+        return memberService.login(loginTo);
+    }
 
     /**
      * 注册

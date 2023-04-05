@@ -4,7 +4,7 @@ server:
 spring:
   application:
     name: mall-order
-  #\u6570\u636E\u5E93\u914D\u7F6E
+  #数据库
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -16,11 +16,45 @@ spring:
     nacos:
       discovery:
         server-addr: 192.168.154.128:8848
+  thymeleaf:
+    cache: false
+  session:
+    store-type: redis
+    timeout: 1d
+  redis:
+    host: 192.168.154.128
+    port: 6379
+    password: wgx
+    connect-timeout: 15000
+    timeout: 100s
+    lettuce:
+      shutdown-timeout: 100s
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 5
+        min-idle: 0
+  rabbitmq:
+    addresses: 47.113.148.39
+    port: 5672
+    virtual-host: /
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+    template:
+      mandatory: true
 
 
-#mybatis-plus\u914D\u7F6E
+#mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+
+thread:
+  core-size: 10
+  max-size: 100
+  keep-alive-time: 100

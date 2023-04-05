@@ -11,7 +11,9 @@ public enum ExceptionCode implements HttpStatus {
     VALIDATION_EXCEPTION(10001, "参数校验异常"),
 
     SMS_CODE_EXCEPTION(10002, "短信验证码发送失败"),
-    PRODUCT_UP_EXCEPTION(11000, "商品上架失败");
+    PRODUCT_UP_EXCEPTION(11000, "商品上架失败"),
+
+    ACCOUNT_OR_PASSWORD_ERROR(12000, "账号或密码错误");
 
 
     private Integer code;

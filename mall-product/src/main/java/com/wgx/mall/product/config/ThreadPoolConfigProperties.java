@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "thread")
 @Data
 public class ThreadPoolConfigProperties {
-    private Integer coreSize;
-    private Integer maxSize;
-    private Integer keepAliveTime;
+    private Integer coreSize = 10;
+    private Integer maxSize = 100;
+    private Integer keepAliveTime = 100;
 }

@@ -8,11 +8,13 @@
 
 package com.wgx.common.utils;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.TypeReference;
 import com.wgx.common.exception.ExceptionCode;
 import org.apache.http.HttpStatus;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +23,7 @@ import java.util.Map;
  *
  * @author Mark sunlightcs@gmail.com
  */
-public class R<T> extends HashMap<String, Object> {
+public class R<T> extends HashMap<String, Object> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public R() {
@@ -77,12 +79,16 @@ public class R<T> extends HashMap<String, Object> {
 		return (String) this.get("msg");
 	}
 
-	public R setData(T data) {
+	public R<T> setData(T data) {
 		return this.put("data", data);
 	}
 
-	public T getData(TypeReference<T> typeReference) {
+	public T getData(TypeReference<?> typeReference) {
 		String data = JSON.toJSONString(this.get("data"));
 		return JSON.parseObject(data, typeReference);
+	}
+
+	public R<T> putDate(T data) {
+		return this.put("data", data);
 	}
 }
